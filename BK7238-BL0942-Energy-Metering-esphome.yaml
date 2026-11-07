@@ -72,6 +72,15 @@ text_sensor:
     icon: mdi:shield-check    
     update_interval: 1s
     lambda: |-
+      if (isnan(id(voltage).state) && isnan(id(current).state))
+        return {"No Data"};  
+              
+      if (!isnan(id(current).state) && isnan(id(voltage).state))
+        return {"No Voltage Data"};  
+
+      if (!isnan(id(voltage).state) && isnan(id(current).state))
+        return {"No Current Data"};    
+
       if (id(voltage).state > id(over_voltage).state)
         return {"Over Voltage"};
 
@@ -79,7 +88,7 @@ text_sensor:
         return {"Low Voltage"};
 
       if (id(current).state > id(over_load).state)
-        return {"Over Load"};
+        return {"Over Load"};  
 
       return {"Safety"};      
       
